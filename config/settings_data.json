@@ -93,7 +93,7 @@
     "social_youtube_link": "",
     "social_vimeo_link": "",
     "predictive_search_enabled": true,
-    "predictive_search_show_vendor": false,
+    "predictive_search_show_vendor": true,
     "predictive_search_show_price": false,
     "currency_code_enabled": true,
     "cart_type": "drawer",
@@ -106,7 +106,7 @@
             "type": "announcement",
             "settings": {
               "text": "HFD Electronic Official Store",
-              "color_scheme": "background-1",
+              "color_scheme": "accent-2",
               "link": ""
             }
           }
@@ -152,7 +152,7 @@
           "footer-2": {
             "type": "text",
             "settings": {
-              "heading": "Our mission",
+              "heading": "",
               "subtext": "<p>Share contact information, store details, and brand content with your customers.<\/p>"
             }
           }
@@ -165,9 +165,9 @@
         "settings": {
           "color_scheme": "accent-2",
           "newsletter_enable": true,
-          "newsletter_heading": "Subscribe to our emails",
+          "newsletter_heading": "订阅我们的邮件信息",
           "show_social": true,
-          "enable_country_selector": false,
+          "enable_country_selector": true,
           "enable_language_selector": true,
           "payment_enable": true,
           "margin_top": 48,
