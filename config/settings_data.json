@@ -40,7 +40,7 @@
     "inputs_shadow_horizontal_offset": 0,
     "inputs_shadow_vertical_offset": 4,
     "inputs_shadow_blur": 5,
-    "card_style": "standard",
+    "card_style": "card",
     "card_image_padding": 0,
     "card_text_alignment": "left",
     "card_color_scheme": "background-2",
@@ -163,7 +163,7 @@
           "footer-2"
         ],
         "settings": {
-          "color_scheme": "accent-2",
+          "color_scheme": "background-1",
           "newsletter_enable": true,
           "newsletter_heading": "订阅我们的邮件信息",
           "show_social": true,
