@@ -395,6 +395,43 @@
       {%- if section.settings.menu_type_desktop == 'dropdown' -%}
         <nav class="header__inline-menu">
           <ul class="list-menu list-menu--inline" role="list">
+            <li>
+              <header-menu>
+                <details id="Details-HeaderMenu-0">
+                  <summary class="header__menu-item list-menu__item link focus-inset">
+                    <span>Catalog</span>
+                    {% render 'icon-caret' %}
+                  </summary>
+                  <ul id="HeaderMenu-MenuList-0" class="header__submenu list-menu list-menu--disclosure gradient caption-large motion-reduce global-settings-popup" role="list" tabindex="-1">
+                    {%- assign fatherCount = 0 -%}
+                    {%- for fatherCategory in collections -%}
+                      {%- if fatherCategory.metafields.custom.isCategory and fatherCategory.metafields.custom.fatherCategory == blank -%}
+                      <li>
+                          {%- assign fatherCount = fatherCount | plus: 1 -%}
+                          <details id="Details-HeaderSubMenu-{{ fatherCount }}">
+                            <summary class="header__menu-item link link--text list-menu__item focus-inset caption-large">
+                              <span>{{ fatherCategory.title }}</span>
+                              {% render 'icon-caret' %}
+                            </summary>
+                            <ul id="HeaderMenu-SubMenuList-{{ fatherCount }}" class="header__submenu list-menu motion-reduce">
+                              {%- for childCategory in collections -%}
+                                {%- if childCategory.metafields.custom.isCategory and childCategory.metafields.custom.fatherCategory == fatherCategory.title -%}
+                                  <li>
+                                    <a href="{{ childCategory.url }}" class="header__menu-item list-menu__item link link--text focus-inset caption-large">
+                                      {{ childCategory.title }}
+                                    </a>
+                                  </li>
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </ul>
+                          </details>
+                      </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                </details>
+              </header-menu>
+            </li>
             {%- for link in section.settings.menu.links -%}
               <li>
                 {%- if link.links != blank -%}
@@ -445,6 +482,38 @@
       {%- else -%}
         <nav class="header__inline-menu">
           <ul class="list-menu list-menu--inline" role="list">
+            <li>
+              <header-menu>
+                <details id="Details-HeaderMenu-0" class="mega-menu">
+                  <summary class="header__menu-item list-menu__item link focus-inset">
+                    <span>Catalog</span>
+                    {% render 'icon-caret' %}
+                  </summary>
+                  <div id="MegaMenu-Content-0" class="mega-menu__content gradient motion-reduce global-settings-popup" tabindex="-1">
+                    <ul class="mega-menu__list page-width" role="list">
+                      {%- for fatherCategory in collections -%}
+                        {%- if fatherCategory.metafields.custom.isCategory and fatherCategory.metafields.custom.fatherCategory == blank -%}
+                          <a href="{{ fatherCategory.url }}" class="mega-menu__link mega-menu__link--level-2 link">
+                            {{ fatherCategory.title }}
+                          </a>
+                          <ul class="list-unstyled" role="list">
+                            {%- for childCategory in collections -%}
+                              {%- if childCategory.metafields.custom.isCategory and childCategory.metafields.custom.fatherCategory == fatherCategory.title -%}
+                                <li>
+                                  <a href="{{ childCategory.url }}" class="mega-menu__link link">
+                                    {{ childCategory.title }}
+                                  </a>
+                                </li>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                </details>
+              </header-menu>
+            </li>            
             {%- for link in section.settings.menu.links -%}
               <li>
                 {%- if link.links != blank -%}
