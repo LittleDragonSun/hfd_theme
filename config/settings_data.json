@@ -123,10 +123,10 @@
       "header": {
         "type": "header",
         "settings": {
-          "color_scheme": "background-2",
+          "color_scheme": "background-1",
           "logo_width": 90,
           "logo_position": "middle-left",
-          "menu": "company",
+          "menu": "footer",
           "menu_type_desktop": "dropdown",
           "show_line_separator": true,
           "enable_sticky_header": true,
@@ -138,24 +138,32 @@
       "footer": {
         "type": "footer",
         "blocks": {
+          "a3ff4c17-5cc7-49b6-80de-43b03be5cbd3": {
+            "type": "link_list",
+            "settings": {
+              "heading": "Products",
+              "menu": "products"
+            }
+          },
+          "52e83662-09f5-40b1-830a-d5f8e1620895": {
+            "type": "link_list",
+            "settings": {
+              "heading": "Supports",
+              "menu": "supports"
+            }
+          },
           "footer-0": {
             "type": "link_list",
             "settings": {
-              "heading": "Quick links",
-              "menu": "footer"
-            }
-          },
-          "footer-2": {
-            "type": "text",
-            "settings": {
-              "heading": "",
-              "subtext": "<p>Share contact information, store details, and brand content with your customers.<\/p>"
+              "heading": "Company",
+              "menu": "company"
             }
           }
         },
         "block_order": [
-          "footer-0",
-          "footer-2"
+          "a3ff4c17-5cc7-49b6-80de-43b03be5cbd3",
+          "52e83662-09f5-40b1-830a-d5f8e1620895",
+          "footer-0"
         ],
         "settings": {
           "color_scheme": "background-1",
