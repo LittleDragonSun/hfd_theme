@@ -42,9 +42,18 @@
     }
   }
 
-  .desktop-header-menu {
+ .desktop-header-catalog-item .desktop_sub_catalog {
+    display: none;
+  }
+
+  {% comment %} #catalog-level2-container {
+    display: none;
+  } {% endcomment %}
+
+  .desktop-header-catalog, #sub_catalog_container {
     max-height: 66vh;
     overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   .menu-drawer-container {
@@ -88,6 +97,7 @@
 </style>
 
 {%- style -%}
+
   .header {
     padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
@@ -401,40 +411,47 @@
         <nav class="header__inline-menu">
           <ul class="list-menu list-menu--inline" role="list">
             <li>
-              <header-menu>
+              {%- comment -%}catalog menu of desktop{%- endcomment -%}
+              <header-menu class="catalog catalog-dropdown">
                 <details id="Details-HeaderMenu-0">
                   <summary class="header__menu-item list-menu__item link focus-inset">
                     <span>Catalog</span>
                     {% render 'icon-caret' %}
                   </summary>
-                  <ul id="HeaderMenu-MenuList-0" class="desktop-header-menu header__submenu list-menu list-menu--disclosure gradient caption-large motion-reduce global-settings-popup" role="list" tabindex="-1">
+                  <ul id="HeaderMenu-MenuList-0" class="desktop-header-catalog header__submenu list-menu list-menu--disclosure gradient caption-large motion-reduce global-settings-popup" role="list" tabindex="-1">
                     {%- assign fatherCount = 0 -%}
                     {%- for fatherCategory in collections -%}
                       {%- if fatherCategory.metafields.custom.isCategory and fatherCategory.metafields.custom.fatherCategory == blank -%}
-                      <li>
+                      <li class="desktop-header-catalog-item">
                           {%- assign fatherCount = fatherCount | plus: 1 -%}
-                          <details id="Details-HeaderSubMenu-{{ fatherCount }}">
-                            <summary class="header__menu-item link link--text list-menu__item focus-inset caption-large">
+                          <div id="Details-HeaderSubMenu-{{ fatherCount }}">
+                            <div class="header__menu-item link link--text list-menu__item focus-inset caption-large">
                               <span>{{ fatherCategory.title }}</span>
-                              {% render 'icon-caret' %}
-                            </summary>
-                            <ul id="HeaderMenu-SubMenuList-{{ fatherCount }}" class="header__submenu list-menu motion-reduce">
+                            </div>
+                            <ul id="HeaderMenu-SubMenuList-{{ fatherCount }}" class="header__submenu desktop_sub_catalog list-menu motion-reduce">
                               {%- for childCategory in collections -%}
                                 {%- if childCategory.metafields.custom.isCategory and childCategory.metafields.custom.fatherCategory == fatherCategory.title -%}
                                   <li>
-                                    <a href="{{ childCategory.url }}" class="header__menu-item list-menu__item link link--text focus-inset caption-large">
-                                      {{ childCategory.title }}
-                                    </a>
+                                    <a href="{{ childCategory.url }}" class="header__menu-item desktop_sub_catalog_item list-menu__item link link--text focus-inset caption-large">{{ childCategory.title }}</a>
                                   </li>
                                 {%- endif -%}
                               {%- endfor -%}
                             </ul>
-                          </details>
+                          </div>
                       </li>
                       {%- endif -%}
                     {%- endfor -%}
                   </ul>
+                  <div id="sub_catalog_container" class="gradient" style="
+                    position: absolute;
+                    left: 200px;
+                    top: 43px;
+                    width: 200px;
+                    overflow-y: scroll;
+                    overflow-x: hidden;
+                "></div>
                 </details>
+                
               </header-menu>
             </li>
             {%- for link in section.settings.menu.links -%}
@@ -700,12 +717,57 @@
   {%- render 'cart-notification', color_scheme: section.settings.color_scheme -%}
 {%- endif -%}
 
+<script type='module'>
+  {%- comment -%}
+    wrapping slash with space of category's name for stlying that can break down new line.
+  {%- endcomment -%}
+  let fatherCategoryNameEles = document.querySelectorAll('.desktop-header-catalog-item .header__menu-item span');
+  let childCategoryNameEles = document.querySelectorAll('.desktop-header-catalog .desktop_sub_catalog > li a');
+
+  wrapWithSpace(fatherCategoryNameEles);
+  wrapWithSpace(childCategoryNameEles);
+
+  function wrapWithSpace(eles) {
+    let reg = /\s*\/\s*/mg;
+    eles.forEach(function(ele) {
+      let text = ele.textContent;
+      ele.textContent = text.replace(reg, ' / ');
+    });
+  }
+
+  let fatherCategoryEles = document.querySelectorAll('.desktop-header-catalog-item');
+
+  setupSubCatalog(fatherCategoryEles);
+  // setting subcatalog floating
+  function setupSubCatalog(fatherCategoryEles) {
+    let eleContainer = document.querySelector('#sub_catalog_container');
+    fatherCategoryEles.forEach(father => {
+      let subCalatalog = father.querySelector('.desktop_sub_catalog');
+      father.addEventListener('mouseenter', function() {
+        let preSubCalatalog = eleContainer.querySelector('.desktop_sub_catalog');
+        if (preSubCalatalog) {
+          preSubCalatalog.remove();
+        }
+        eleContainer.append(subCalatalog.cloneNode(true));
+        eleContainer.style.display = 'block';
+      })
+      document.onclick = () => {
+        let preSubCalatalog = eleContainer.querySelector('.desktop_sub_catalog');
+        if (preSubCalatalog) {
+          preSubCalatalog.remove();
+        }
+        eleContainer.style.display = 'none';
+      }
+    });
+  }
+
+</script>
+
 {% javascript %}
   class StickyHeader extends HTMLElement {
     constructor() {
       super();
     }
-
     connectedCallback() {
       this.header = document.getElementById('shopify-section-header');
       this.headerBounds = {};
